@@ -15,7 +15,9 @@ import {
 	NoCredentialsEmptyState,
 } from "../components/SkeletonLoader"
 import { ActivityFeed } from "../components/ActivityFeed"
+import { ReputationBadge } from "../components/ReputationBadge"
 import { WalletContext } from "../providers/WalletProvider"
+import { shortenAddress } from "../util/scholarshipApplications"
 
 const Profile: React.FC = () => {
 	const { t } = useTranslation()
@@ -29,9 +31,6 @@ const Profile: React.FC = () => {
 	}, [])
 
 	const user = {
-		name: "Alex Rivera",
-		address: "GA7B...4Y2K",
-		lrnBalance: "250 LRN",
 		nfts: [
 			{
 				id: "1",
@@ -71,18 +70,18 @@ const Profile: React.FC = () => {
 						{t("pages.profile.title")}
 					</h1>
 					<code className="text-white/30 text-sm block mb-6 font-mono tracking-widest">
-						{user.address}
+						{walletAddress
+							? shortenAddress(walletAddress)
+							: t("wallet.connect")}
 					</code>
 					<div className="flex flex-wrap justify-center md:justify-start gap-4">
-						<div className="px-5 py-2 glass rounded-full border border-brand-cyan/30 flex items-center gap-2">
-							<span className="w-2 h-2 bg-brand-cyan rounded-full animate-pulse" />
-							<span className="text-xs font-black uppercase tracking-widest text-brand-cyan">
-								{user.lrnBalance}
-							</span>
-						</div>
-						<div className="px-5 py-2 glass rounded-full border border-white/10 text-xs font-black uppercase tracking-widest text-white/40">
-							Elite Scholar Tier
-						</div>
+						{walletAddress ? (
+							<ReputationBadge size="md" showBalance />
+						) : (
+							<div className="px-5 py-2 glass rounded-full border border-white/10 text-xs font-black uppercase tracking-widest text-white/40">
+								{t("wallet.connect")}
+							</div>
+						)}
 					</div>
 				</div>
 			</header>
